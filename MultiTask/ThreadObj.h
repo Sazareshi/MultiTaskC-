@@ -18,7 +18,7 @@ using namespace std;
 #define TAB_DIALOG_W				600
 #define TAB_DIALOG_H				250
 #define TAB_POS_X					10
-#define TAB_POS_Y					MSG_WND_Y+(MSG_WND_H+MSG_WND_Y_SPACE)*TASK_NUM+10
+#define TAB_POS_Y					MSG_WND_ORG_Y+(MSG_WND_H+MSG_WND_Y_SPACE)*TASK_NUM+10
 #define TAB_SIZE_H					25
 
 //inf.thread_com用　スレッドループ制御用
