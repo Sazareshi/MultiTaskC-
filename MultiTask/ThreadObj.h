@@ -14,13 +14,6 @@ using namespace std;
 #define INITIAL_TASK_STACK_SIZE		16384
 #define DEFAUT_TASK_CYCLE			50
 
-//# 各タスクパラメータ設定用Dialog、タブ関連サイズ設定値
-#define TAB_DIALOG_W				600
-#define TAB_DIALOG_H				250
-#define TAB_POS_X					10
-#define TAB_POS_Y					MSG_WND_ORG_Y+(MSG_WND_H+MSG_WND_Y_SPACE)*TASK_NUM+10
-#define TAB_SIZE_H					25
-
 //inf.thread_com用　スレッドループ制御用
 #define REPEAT_INFINIT		0	//永久ループ
 #define TERMINATE_THREAD	1	//スレッド中断
@@ -49,7 +42,7 @@ typedef struct {
 	unsigned int	ID;								//スレッドID
 	HANDLE			hndl;							//スレッドハンドル
 	HANDLE			hevent;							//イベントハンドル
-	unsigned int	cycle_ms;						//スレッド実行設定周期　ms
+	unsigned int	cycle_ms;						//スレッド実行設定周期
 	unsigned int	cycle_count;					//スレッド実行設定周期　Tick count（ms/system tick)
 	int				trigger_type;					//スレッド起動条件　定周期orイベント
 	int				priority;						//スレッドのプライオリティ
