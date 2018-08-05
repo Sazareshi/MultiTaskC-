@@ -27,6 +27,11 @@ CThreadObj::~CThreadObj() {
 	delete inf.hBmp;
 };//デストラクタ
 
+void CThreadObj::init_task(void *pobj) {
+	set_panel_tip_txt();  
+	return; 
+};
+
 //# スレッドメイン関数
 unsigned CThreadObj::run(void *param) {
 
@@ -90,6 +95,8 @@ void CThreadObj::set_PNLparam_value(float p1, float p2, float p3, float p4, floa
 }
 void CThreadObj::set_panel_tip_txt()
 {
-
+	//function buttonの説明文
+	HWND hstatic = GetDlgItem(inf.hWnd_opepane, IDC_STATIC_TASKSET3);
+	SetWindowText(hstatic, L"Item :  Explanation of Button 1-6 ↓\n 1:no func 2:no func 3:no_func \n 4:no func 5:no_func 6:no_func");
 }
 
