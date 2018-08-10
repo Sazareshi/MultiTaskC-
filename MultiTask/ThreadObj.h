@@ -13,6 +13,7 @@ using namespace std;
 #define TASK_NUM					6
 #define INITIAL_TASK_STACK_SIZE		16384
 #define DEFAUT_TASK_CYCLE			50
+#define TASK_EVENT_MAX					8
 
 //inf.thread_com用　スレッドループ制御用
 #define REPEAT_INFINIT		0	//永久ループ
@@ -26,6 +27,8 @@ using namespace std;
 #define THREAD_WORK_OPTION2		3
 
 #define MSG_LIST_MAX			14
+
+#define ID_TIMER_EVENT			0	//タイマー用イベント配列の位置
 
 
 /***********************************************************************
@@ -41,7 +44,8 @@ typedef struct {
 	int				index;							//スレッドIndex
 	unsigned int	ID;								//スレッドID
 	HANDLE			hndl;							//スレッドハンドル
-	HANDLE			hevent;							//イベントハンドル
+	HANDLE			hevents[TASK_EVENT_MAX];		//イベントハンドル
+	int				active_events = 1;				//有効なイベント数
 	unsigned int	cycle_ms;						//スレッド実行設定周期
 	unsigned int	cycle_count;					//スレッド実行設定周期　Tick count（ms/system tick)
 	int				trigger_type;					//スレッド起動条件　定周期orイベント
@@ -98,11 +102,6 @@ public:
 	virtual void set_panel_tip_txt();//タブパネルのStaticテキストを設定
 	virtual void set_panel_pb_txt() { return; };//タブパネルのFunctionボタンのStaticテキストを設定
 	virtual void set_PNLparam_value(float p1, float p2, float p3, float p4, float p5, float p6);//パラメータ初期表示値設定
-
-
-
-private:
-	static LRESULT CALLBACK DlgProcDefault(HWND, UINT, WPARAM, LPARAM);
 
 protected:
 	CHelper tool;

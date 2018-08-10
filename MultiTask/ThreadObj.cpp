@@ -36,7 +36,7 @@ void CThreadObj::init_task(void *pobj) {
 unsigned CThreadObj::run(void *param) {
 
 	while (this->inf.thread_com != TERMINATE_THREAD){
-		WaitForSingleObject(((CThreadObj*)param)->inf.hevent, INFINITE);//メインスレッドからのSIGNAL状態待ち
+		WaitForMultipleObjects(inf.active_events,((CThreadObj*)param)->inf.hevents,FALSE, INFINITE);//メインスレッドからのSIGNAL状態待ち
 
 		//処理周期確認用
 		DWORD start_time = timeGetTime();
@@ -78,9 +78,7 @@ void CThreadObj::txout2msg_listbox(std::wstring str) {
 void CThreadObj::txout2msg_listbox(std::string str) {
 
 };
-LRESULT CALLBACK CThreadObj::DlgProcDefault(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp) {
-	return FALSE;
-};
+
 LRESULT CALLBACK CThreadObj::PanelProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp) {
 
 	return 0;
