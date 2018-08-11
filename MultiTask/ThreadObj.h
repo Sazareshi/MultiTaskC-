@@ -45,7 +45,8 @@ typedef struct {
 	unsigned int	ID;								//スレッドID
 	HANDLE			hndl;							//スレッドハンドル
 	HANDLE			hevents[TASK_EVENT_MAX];		//イベントハンドル
-	int				active_events = 1;				//有効なイベント数
+	int				n_active_events = 1;			//有効なイベント数
+	int				event_triggered;				//発生したイベントの番号
 	unsigned int	cycle_ms;						//スレッド実行設定周期
 	unsigned int	cycle_count;					//スレッド実行設定周期　Tick count（ms/system tick)
 	int				trigger_type;					//スレッド起動条件　定周期orイベント
@@ -67,6 +68,11 @@ typedef struct {
 	HWND			hWnd_msgList;					//自メインウィンドウのメッセージ表示用リストコントロールへのハンドル
 	HWND			hWnd_work;						//自専用作業用ウィンドウのハンドル
 
+    //-操作パネル関連
+	int				cnt_PNLlist_msg = 0;			//パネルメッセージリストのカウント数
+	int				panel_func_id = 1;				//パネルfunctionボタンの選択内容
+	int				panel_type_id = 1;				//パネルtypeボタンの選択内容
+													
 	//-外部インターフェース
 	unsigned long	*psys_counter;					//メインシステムカウンターの参照先ポインタ
 	unsigned		work_select=0;					//スレッド実行の関数の種類を指定
