@@ -59,10 +59,21 @@ void CThreadObj::routine_work(void *param) {
 	ws << L"I am working!"<< *(inf.psys_counter);
 	tweet2owner(ws.str()); ws.str(L"") ; ws.clear();
 
-	wstring wstr = L"ZZZ";
-	txout2msg_listbox(wstr);
+	//wstring wstr = L"ZZZ";
+	//txout2msg_listbox(wstr);
 
 };
+
+
+void CThreadObj::optional_work1(void *param) {
+	ws << L"Working on option1!" << *(inf.psys_counter);
+	tweet2owner(ws.str()); ws.str(L""); ws.clear();
+};
+void CThreadObj::optional_work2(void *param) {
+	ws << L"Working on option2!" << *(inf.psys_counter);
+	tweet2owner(ws.str()); ws.str(L""); ws.clear();
+};
+
 
 //# メインウィンドウへのショートメッセージ表示　string
 void CThreadObj::tweet2owner(const std::string &src) {
@@ -112,21 +123,71 @@ LRESULT CALLBACK CThreadObj::PanelProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp
 	switch (msg) {
 	case WM_COMMAND:
 		switch (LOWORD(wp)) {
-		case IDC_TASK_FUNC_RADIO1:inf.panel_func_id = IDC_TASK_FUNC_RADIO1; set_panel_tip_txt(); break;
-		case IDC_TASK_FUNC_RADIO2:inf.panel_func_id = IDC_TASK_FUNC_RADIO2; set_panel_tip_txt(); break;
-		case IDC_TASK_FUNC_RADIO3:inf.panel_func_id = IDC_TASK_FUNC_RADIO3; set_panel_tip_txt(); break;
-		case IDC_TASK_FUNC_RADIO4:inf.panel_func_id = IDC_TASK_FUNC_RADIO4; set_panel_tip_txt(); break;
-		case IDC_TASK_FUNC_RADIO5:inf.panel_func_id = IDC_TASK_FUNC_RADIO5; set_panel_tip_txt(); break;
-		case IDC_TASK_FUNC_RADIO6:inf.panel_func_id = IDC_TASK_FUNC_RADIO6; set_panel_tip_txt(); break;
-		case IDC_TASK_ITEM_RADIO1:inf.panel_type_id = IDC_TASK_ITEM_RADIO1; set_panel_tip_txt(); SetFocus(GetDlgItem(inf.hWnd_opepane, IDC_TASK_EDIT1)); break;
-		case IDC_TASK_ITEM_RADIO2:inf.panel_type_id = IDC_TASK_ITEM_RADIO2; set_panel_tip_txt(); SetFocus(GetDlgItem(inf.hWnd_opepane, IDC_TASK_EDIT2)); break;
-		case IDC_TASK_ITEM_RADIO3:inf.panel_type_id = IDC_TASK_ITEM_RADIO3; set_panel_tip_txt(); SetFocus(GetDlgItem(inf.hWnd_opepane, IDC_TASK_EDIT3)); break;
-		case IDC_TASK_ITEM_RADIO4:inf.panel_type_id = IDC_TASK_ITEM_RADIO4; set_panel_tip_txt(); SetFocus(GetDlgItem(inf.hWnd_opepane, IDC_TASK_EDIT4)); break;
-		case IDC_TASK_ITEM_RADIO5:inf.panel_type_id = IDC_TASK_ITEM_RADIO5; set_panel_tip_txt(); SetFocus(GetDlgItem(inf.hWnd_opepane, IDC_TASK_EDIT5)); break;
-		case IDC_TASK_ITEM_RADIO6:inf.panel_type_id = IDC_TASK_ITEM_RADIO6; set_panel_tip_txt(); SetFocus(GetDlgItem(inf.hWnd_opepane, IDC_TASK_EDIT6)); break;
+		case IDC_TASK_FUNC_RADIO1:
+		case IDC_TASK_FUNC_RADIO2:
+		case IDC_TASK_FUNC_RADIO3:
+		case IDC_TASK_FUNC_RADIO4:
+		case IDC_TASK_FUNC_RADIO5:
+		case IDC_TASK_FUNC_RADIO6:
+			inf.panel_func_id = LOWORD(wp); set_panel_tip_txt(); set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0); break;
+
+		case IDC_TASK_ITEM_RADIO1: 
+		case IDC_TASK_ITEM_RADIO2: 
+		case IDC_TASK_ITEM_RADIO3: 
+		case IDC_TASK_ITEM_RADIO4: 
+		case IDC_TASK_ITEM_RADIO5:
+		case IDC_TASK_ITEM_RADIO6: 
+			inf.panel_type_id = LOWORD(wp);set_panel_tip_txt();  SetFocus(GetDlgItem(inf.hWnd_opepane, IDC_TASK_EDIT1)); break;
+
+		case IDSET: {
+			wstring wstr,wstr_tmp;
+
+			//サンプルとしていろいろな型で読み込んで表示している
+			wstr += L"Param 1(d):";
+			int n=GetDlgItemText(hDlg, IDC_TASK_EDIT1,(LPTSTR)wstr_tmp.c_str(),128);
+			if(n) wstr_tmp = to_wstring(stod(wstr_tmp));	wstr = wstr + wstr_tmp.c_str();
+
+			wstr += L",  Param 2(i):";
+			n = GetDlgItemText(hDlg, IDC_TASK_EDIT2, (LPTSTR)wstr_tmp.c_str(), 128);
+			if (n) wstr_tmp = to_wstring(stoi(wstr_tmp));	wstr = wstr + wstr_tmp.c_str();
+
+			wstr += L",  Param 3(f):";
+			n = GetDlgItemText(hDlg, IDC_TASK_EDIT3, (LPTSTR)wstr_tmp.c_str(), 128);
+			if (n) wstr_tmp = to_wstring(stof(wstr_tmp));	wstr = wstr + wstr_tmp.c_str();
+
+			wstr += L",  Param 4(l):";
+			n = GetDlgItemText(hDlg, IDC_TASK_EDIT4, (LPTSTR)wstr_tmp.c_str(), 128);
+			if (n) wstr_tmp = to_wstring(stol(wstr_tmp));	wstr = wstr + wstr_tmp.c_str();
+
+			wstr += L",  Param 5(c):";
+			n = GetDlgItemText(hDlg, IDC_TASK_EDIT5, (LPTSTR)wstr_tmp.c_str(), 128);
+			wstr += wstr_tmp.c_str();
+
+			wstr += L",   Param 6(c):";
+			n = GetDlgItemText(hDlg, IDC_TASK_EDIT6, (LPTSTR)wstr_tmp.c_str(), 128);
+			wstr += wstr_tmp.c_str();
+			
+			txout2msg_listbox(wstr);
+			
+
+		}break;
+		case IDRESET:{
+			set_PNLparam_value(0.0,0.0, 0.0, 0.0, 0.0, 0.0);
+
+		}break;
+
+		case IDC_TASK_OPTION_CHECK1: 
+			SendMessage(GetDlgItem(hDlg, IDC_TASK_OPTION_CHECK2), BM_SETCHECK, BST_UNCHECKED, 0L);
+			if (IsDlgButtonChecked(hDlg, IDC_TASK_OPTION_CHECK1) == BST_CHECKED) inf.work_select = THREAD_WORK_OPTION1;
+			else inf.work_select = THREAD_WORK_ROUTINE;
+			break;
+
+		case IDC_TASK_OPTION_CHECK2: 
+			SendMessage(GetDlgItem(hDlg, IDC_TASK_OPTION_CHECK1), BM_SETCHECK, BST_UNCHECKED, 0L);
+			if (IsDlgButtonChecked(hDlg, IDC_TASK_OPTION_CHECK2) == BST_CHECKED) inf.work_select = THREAD_WORK_OPTION2;
+			else inf.work_select = THREAD_WORK_ROUTINE;
 			break;
 		}
-		break;
 	}
 	return 0;
 };
@@ -153,27 +214,21 @@ void CThreadObj::set_panel_tip_txt()
 		switch (inf.panel_type_id) {
 		case IDC_TASK_ITEM_RADIO1:
 			wstr_type += L"Param of type1 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO2:
 			wstr_type += L"Param of type2 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO3:
 			wstr_type += L"Param of type3 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO4:
 			wstr_type += L"Param of type4 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO5:
 			wstr_type += L"Param of type5 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO6:
 			wstr_type += L"Param of type6 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		default:break;
 		}
@@ -183,27 +238,21 @@ void CThreadObj::set_panel_tip_txt()
 		switch (inf.panel_type_id) {
 		case IDC_TASK_ITEM_RADIO1:
 			wstr_type += L"Param of type1 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO2:
 			wstr_type += L"Param of type2 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO3:
 			wstr_type += L"Param of type3 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO4:
 			wstr_type += L"Param of type4 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO5:
 			wstr_type += L"Param of type5 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO6:
 			wstr_type += L"Param of type6 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		default:break;
 		}
@@ -213,27 +262,21 @@ void CThreadObj::set_panel_tip_txt()
 		switch (inf.panel_type_id) {
 		case IDC_TASK_ITEM_RADIO1:
 			wstr_type += L"Param of type1 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO2:
 			wstr_type += L"Param of type2 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO3:
 			wstr_type += L"Param of type3 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO4:
 			wstr_type += L"Param of type4 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO5:
 			wstr_type += L"Param of type5 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO6:
 			wstr_type += L"Param of type6 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		default:break;
 		}
@@ -243,27 +286,21 @@ void CThreadObj::set_panel_tip_txt()
 		switch (inf.panel_type_id) {
 		case IDC_TASK_ITEM_RADIO1:
 			wstr_type += L"Param of type1 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO2:
 			wstr_type += L"Param of type2 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO3:
 			wstr_type += L"Param of type3 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO4:
 			wstr_type += L"Param of type4 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO5:
 			wstr_type += L"Param of type5 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO6:
 			wstr_type += L"Param of type6 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		default:break;
 		}
@@ -273,27 +310,21 @@ void CThreadObj::set_panel_tip_txt()
 		switch (inf.panel_type_id) {
 		case IDC_TASK_ITEM_RADIO1:
 			wstr_type += L"Param of type1 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO2:
 			wstr_type += L"Param of type2 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO3:
 			wstr_type += L"Param of type3 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO4:
 			wstr_type += L"Param of type4 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO5:
 			wstr_type += L"Param of type5 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO6:
 			wstr_type += L"Param of type6 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		default:break;
 		}
@@ -303,27 +334,21 @@ void CThreadObj::set_panel_tip_txt()
 		switch (inf.panel_type_id) {
 		case IDC_TASK_ITEM_RADIO1:
 			wstr_type += L"Param of type1 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO2:
 			wstr_type += L"Param of type2 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO3:
 			wstr_type += L"Param of type3 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO4:
 			wstr_type += L"Param of type4 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO5:
 			wstr_type += L"Param of type5 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		case IDC_TASK_ITEM_RADIO6:
 			wstr_type += L"Param of type6 \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-			set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			break;
 		default:break;
 		}
@@ -331,7 +356,6 @@ void CThreadObj::set_panel_tip_txt()
 	default: {
 		wstr = L"Type for Func? \n\r 1:?? 2:?? 3:?? \n\r 4:?? 5:?? 6:??";
 		wstr_type += L"(Param of type?) \n\r 1:?? 2:??  3:?? \n\r 4:?? 5:?? 6:??";
-		set_PNLparam_value(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	}break;
 	}
 

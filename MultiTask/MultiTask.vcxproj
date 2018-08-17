@@ -176,6 +176,7 @@
     <ResourceCompile Include="MultiTask.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="bmp\com.bmp" />
     <Image Include="bmp\yu.bmp" />
     <Image Include="MultiTask.ico" />
     <Image Include="small.ico" />

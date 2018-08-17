@@ -95,8 +95,8 @@ public:
 	//スレッド実行対象関数内で呼ばれる処理 run()内でいずれかが選択実施される
 	// >set_work()でいずれを実施するか設定する 
 	virtual void routine_work(void *param);
-	virtual void optional_work1(void *param) { Sleep(1000); };
-	virtual void optional_work2(void *param) { Sleep(1000); };
+	virtual void optional_work1(void *param);
+	virtual void optional_work2(void *param);
 	virtual void default_work(void *param) { Sleep(1000); };
 	unsigned int set_work(int work_id) { inf.work_select = work_id; return(inf.work_select); };
 
