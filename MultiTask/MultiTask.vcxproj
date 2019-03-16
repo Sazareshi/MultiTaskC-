@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CActor.h" />
+    <ClInclude Include="CMain.h" />
     <ClInclude Include="ThreadObj.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="MultiTask.h" />
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CActor.cpp" />
+    <ClCompile Include="CMain.cpp" />
     <ClCompile Include="ThreadObj.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="MultiTask.cpp" />
@@ -180,6 +182,7 @@
   <ItemGroup>
     <Image Include="bmp\com.bmp" />
     <Image Include="bmp\entoma.bmp" />
+    <Image Include="bmp\rimuru.bmp" />
     <Image Include="bmp\yu.bmp" />
     <Image Include="MultiTask.ico" />
     <Image Include="small.ico" />
